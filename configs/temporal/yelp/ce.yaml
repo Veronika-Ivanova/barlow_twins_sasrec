@@ -6,7 +6,7 @@ project_name: 'BTSasRec'
 task_name: 'YELP. Full CE'
 
 dataloader:
-  batch_size: 32
+  batch_size: 64
   n_neg_samples: 0 # DO NOT USE FOR CE AND RCE
   augmentations:
     
@@ -23,8 +23,8 @@ model_params:
   dropout_rate: 0.3
 
 trainer_params:
-  num_epochs: 1 #300
-  patience: 10    # nmb of epoches to wait for improvement in validation metrics
+  num_epochs: 300
+  patience: 20    # nmb of epoches to wait for improvement in validation metrics
   skip_epochs: 1  # how often to check if validation metrics are improved
   learning_rate: 0.001
-  seed: 37
+  seed: 1376

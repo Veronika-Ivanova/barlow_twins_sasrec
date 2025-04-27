@@ -9,12 +9,8 @@ dataloader:
   batch_size: 512 #64
   n_neg_samples: 0 # DO NOT USE FOR CE AND RCE
   augmentations:
-    #sliding_window:
-    #  max_len: 200
     target_semantic:
       enable: True
-    #similar_items:
-    #  replace_prob: 0.3
 
 model: 'SASRec' # not used
 model_params:

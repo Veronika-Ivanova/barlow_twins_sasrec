@@ -7,14 +7,14 @@ task_name: 'ML1M. BCE'
 
 dataloader:
   batch_size: 64
-  n_neg_samples: 128 # DO NOT USE FOR CE AND RCE
+  n_neg_samples: 256 # DO NOT USE FOR CE AND RCE
   augmentations:
 
 model: 'SASRec' # not used
 model_params:
-  fwd_type: 'gbce' # DO NOT CHANGE
-  sampling: 'with_rep' # DO NOT USE FOR CE AND RCE
-  gbce_t: 0.75
+  fwd_type: 'bce' # DO NOT CHANGE
+  sampling: 'without_rep' # DO NOT USE FOR CE AND RCE
+  #gbce_t: 0.75
 
   maxlen: 200
   hidden_units: 64

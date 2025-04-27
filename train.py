@@ -82,6 +82,7 @@ def main(config):
                            testset_valid=testset_valid, holdout_valid=holdout_valid, device=device,
                            task=task, log=log)
 
+    print("Finished training!")
     item_buckets = get_popularity_buckets(training, data_description)
 
     print("GET test scores!")
@@ -102,7 +103,8 @@ def main(config):
         for metric_name, metric_value in test_scores.items():
             log.report_single_value(name=f'test_{metric_name}', value=round(metric_value, 4))
         
-        log.report_image(
+        print("Sending images!")
+        """log.report_image(
             title="Embedding 2D UMAP",
             series="Density",
             image=embedding_artefacts["image_umap"]
@@ -116,17 +118,18 @@ def main(config):
             title="Embedding Relations",
             series="Density",
             image=user_item_rel_image
-        )
+        )"""
 
-        task.upload_artifact(name='singular_values_seq', artifact_object=embedding_artefacts["seq_singular_values"])
-        task.upload_artifact(name='singular_values_logits', artifact_object=embedding_artefacts["logits_singular_values"])
-        task.upload_artifact(name='embeddings_seq', artifact_object=embedding_artefacts["embeddings"])
-        task.upload_artifact(name='embeddings_item', artifact_object=embedding_artefacts["item_embeddings"])
-        task.upload_artifact(name='pca_seq', artifact_object=embedding_artefacts["seq_pca"])
-        task.upload_artifact(name='pca_item', artifact_object=embedding_artefacts["item_pca"])
-        task.upload_artifact(name='holdout_test', artifact_object=holdout_)
-
-        task.upload_artifact(name='test_logits', artifact_object=test_logits[:1000])
+        print("Sending uploading artefacts!")
+        task.upload_artifact(name='singular_values_seq', artifact_object=embedding_artefacts["seq_singular_values"],  wait_on_upload=True)
+        task.upload_artifact(name='singular_values_logits', artifact_object=embedding_artefacts["logits_singular_values"], wait_on_upload=True)
+        task.upload_artifact(name='embeddings_seq', artifact_object=embedding_artefacts["embeddings"], wait_on_upload=True)
+        task.upload_artifact(name='embeddings_item', artifact_object=embedding_artefacts["item_embeddings"], wait_on_upload=True)
+        task.upload_artifact(name='holdout_test', artifact_object=holdout_, wait_on_upload=True)
+        #task.upload_artifact(name='test_logits', artifact_object=test_logits[:1000])
+        #task.upload_artifact(name='pca_seq', artifact_object=embedding_artefacts["seq_pca"])
+        #task.upload_artifact(name='pca_item', artifact_object=embedding_artefacts["item_pca"])
+        print("All done!")
 
         task.close()
         

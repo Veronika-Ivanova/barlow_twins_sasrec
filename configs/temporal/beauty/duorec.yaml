@@ -1,33 +1,38 @@
 cuda_visible_devices: 0
 
 data_path: data/beauty.csv # path to csv with structure as in after get_movielens_data(include_time=True)
-splitting: 'leave-one-out'
+splitting: 'temporal'
 project_name: 'BTSasRec'
-task_name: 'Gowalla. Scalable CE'
+task_name: 'Beauty. DuoRec'
 
 dataloader:
-  batch_size: 1024
+  batch_size: 256 #1024
   n_neg_samples: 0
+  augmentations:
+    target_semantic:
+      enable: True
 
 model: 'SASRec' # not used
 model_params:
-  fwd_type: 'sce' # DO NOT CHANGE
-  sampling: 'no_sampling' # DO NOT USE FOR CE AND RCE
+  fwd_type: 'ce' # DO NOT CHANGE
+  sampling: 'no_sampling'
+  #sampling: 'without_rep' # DO NOT USE FOR CE AND RCE
   
   maxlen: 200
   hidden_units: 64
   num_blocks: 2
   num_heads: 1
-  dropout_rate: 0.6
-  
-  n_buckets: 202
-  bucket_size_x: 202
-  bucket_size_y: 256
-  mix_x: False # mix states embs with random matrix
+  dropout_rate: 0.5
+
+  ssl:
+    lmd: 0.001
+    duorec:
+      lmd_sem: 0.01
+      temp: 1.0
 
 trainer_params:
   num_epochs: 300
-  patience: 50    # nmb of epoches to wait for improvement in validation metrics
+  patience: 20    # nmb of epoches to wait for improvement in validation metrics
   skip_epochs: 1  # how often to check if validation metrics are improved
   learning_rate: 0.001
   seed: 1235

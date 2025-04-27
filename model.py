@@ -205,7 +205,17 @@ class SASRec(SASRecBackBone):
             aug_emb = self.log2feats(aug_seqs)
             if "barlow_twins" in self.ssl_config:
                 loss_ssl = self.bt_loss(aug_emb, emb, self.ssl_config["barlow_twins"]["lmd_sem"])
-                #print(loss_ssl.item())
+                
+                # Dropout based augmentations
+                if "supervised_aug" in self.ssl_config.barlow_twins:
+                    su_emb = self.log2feats(log_seqs)
+                    loss_ssl += self.bt_loss(su_emb, emb, self.ssl_config["barlow_twins"]["lmd_sem"])
+            
+            elif "duorec" in self.ssl_config:
+                su_emb = self.log2feats(log_seqs)
+                #loss_ssl += self.info_nce_loss(aug_emb, emb, self.ssl_config.duorec.temp)
+                loss_ssl += 1/self.ssl_config["lmd"] * self.ssl_config.duorec.lmd_sem * self.info_nce_loss(su_emb, emb, self.ssl_config.duorec.temp)
+                #print(loss_ssl.item(), loss.item())
 
             loss += self.ssl_config["lmd"] * loss_ssl
 
@@ -382,6 +392,45 @@ class SASRec(SASRecBackBone):
         off_diag = off_diagonal(C).pow_(2).sum() / feature_dim #* (feature_dim-1)
         
         return (on_diag + lmd_sem * off_diag)
+    
+    def mask_correlated_samples(self, batch_size):
+        N = 2 * batch_size
+        mask = torch.ones((N, N), dtype=bool)
+        mask = mask.fill_diagonal_(0)
+        for i in range(batch_size):
+            mask[i, batch_size + i] = 0
+            mask[batch_size + i, i] = 0
+        return mask
+
+    def info_nce_loss(self, z_i, z_j, temp, sim='dot'):
+        """
+        We do not sample negative examples explicitly.
+        Instead, given a positive pair, similar to (Chen et al., 2017), we treat the other 2(N − 1) augmented examples within a minibatch as negative examples.
+        """
+        z_i = z_i[:, -1, :]
+        z_j = z_j[:, -1, :]
+        batch_size = z_i.shape[0]
+        N = 2 * batch_size
+        z = torch.cat((z_i, z_j), dim=0)
+    
+        if sim == 'cos':
+            sim = nn.functional.cosine_similarity(z.unsqueeze(1), z.unsqueeze(0), dim=2) / temp
+        elif sim == 'dot':
+            sim = torch.mm(z, z.T) / temp
+    
+        sim_i_j = torch.diag(sim, batch_size)
+        sim_j_i = torch.diag(sim, -batch_size)
+    
+        positive_samples = torch.cat((sim_i_j, sim_j_i), dim=0).reshape(N, 1)
+        mask = self.mask_correlated_samples(batch_size)
+        negative_samples = sim[mask].reshape(N, -1)
+    
+        labels = torch.zeros(N).to(positive_samples.device).long()
+        logits = torch.cat((positive_samples, negative_samples), dim=1)
+
+        loss_func = nn.CrossEntropyLoss()
+
+        return loss_func(logits, labels)
     
 
     def decompose(self, z_i, z_j, origin_z, batch_size):

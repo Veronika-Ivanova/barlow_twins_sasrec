@@ -1,11 +1,14 @@
 matplotlib
 numexpr==2.8.4
 numba
-numpy
-pandas
+numpy==1.26.4
+pandas==2.1.4
 polara @ git+https://github.com/evfro/polara.git@develop
-torch
+torch==2.6.0
 tqdm
 clearml
 hydra-core
 clearml-agent
+scipy==1.15.2
+scikit-learn
+umap-learn
