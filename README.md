@@ -36,7 +36,7 @@ python train.py --config-path={CONFIG_PATH} --config-name={CONFIG_NAME} data_pat
 ```
 For example, to reproduce the best results of the $CE$ model on the Yelp dataset with temporal train/test splitting, you should run
 ```bash
-python train.py --config-path=configs/temporal/yelp --config-name='ce' data_path=data/yelp.csv
+python train.py --config-path=configs/temporal/yelp --config-name='ce_bt' data_path=data/yelp.csv
 ```
 For the $SCE$ model, there are both configs for the best NDCG@10 performance (sce_max_ndcg.yaml) and for the same performance as the second-best model but with reduced memory consumption (sce_same_ndcg.yaml).
 
@@ -67,23 +67,5 @@ To reproduce the result for non-optimal configurations (other points on the corr
          "model_params.bucket_size_y": [64, 256, 512, 1024, 4096]},
 }
 ``` 
-The parameters of the underlying transformer are selected according to the original SASRec work. They were the same in all the experiments (except the leave_one_out split experiments) and could be seen in any of the config files.
 
-### Dependence on SCE Hyperparameters & Influence of Mix Operation
-
-To reproduce the results of these sections of the paper you should modify the model_params.n_buckets, model_params.bucket_size_x and model_params.mix_x parameters of the sce configs accordingly and use the same parameter grid as mentioned above.
-
-## Citing SCE
-
-Please use the following BibTeX entry:
-
-```bibtex
-@inproceedings{mezentsev2024scalable,
-  title={Scalable Cross-Entropy Loss for Sequential Recommendations with Large Item Catalogs},
-  author={Mezentsev, Gleb and Gusak, Danil and Oseledets, Ivan and Frolov, Evgeny},
-  booktitle={Proceedings of the 18th ACM Conference on Recommender Systems},
-  pages={475--485},
-  year={2024}
-}
-```
 
