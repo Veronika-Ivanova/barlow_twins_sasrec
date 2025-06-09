@@ -8,7 +8,7 @@ Non-contrastive learning (NCL) methods have recently advanced many areas of mach
 To install all the necessary packages, simply run
 
 ```bash
-
+pip install -r requirements.txt
 ```
 
 ## Data
