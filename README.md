@@ -20,16 +20,6 @@ For all datasets except Amazon Beauty (to ensure comparable performance for *Tab
 
 When running the code for the experiments, you can pass +project_name={PNAME} +task_name{TNAME} options, in which case the intermediate validation metrics and the final test metrics will be reported to a ClearML server and could be later viewed in a web interface, otherwise only the final test metrics will be printed to the terminal.
 
-### Impact of different components on peak GPU memory when training SASRec with Cross-Entropy loss
-
-To generate the data used for the corresponding plot you should run the following command with the required parameter values:
-
-```bash
-python measure_ce_memory.py --bs={BS} --catalog={CATALOG_SIZE}
-```
-
-### Model Performance Under Memory Constraints & Evaluating SASRec-SCE Against Contemprorary Models
-
 To reproduce the best results from the paper (in terms of NDCG@10) for each model ($SCE$, $BCE$, $gBCE$, $CE^-$, $CE$), you should run the following command
 ```bash
 python train.py --config-path={CONFIG_PATH} --config-name={CONFIG_NAME} data_path={DATA_PATH}
@@ -38,7 +28,7 @@ For example, to reproduce the best results of the $CE$ model on the Yelp dataset
 ```bash
 python train.py --config-path=configs/temporal/yelp --config-name='ce_bt' data_path=data/yelp.csv
 ```
-For the $SCE$ model, there are both configs for the best NDCG@10 performance (sce_max_ndcg.yaml) and for the same performance as the second-best model but with reduced memory consumption (sce_same_ndcg.yaml).
+For the $BT$ model, there are both configs for the best NDCG@10 performance (sce_max_ndcg.yaml) and for the same performance as the second-best model but with reduced memory consumption (ce_bt.yaml) or (sce_bt.yaml).
 
 To reproduce the result for non-optimal configurations (other points on the corresponding figure) and to reproduce more accurate results for optimal configurations (using several random seeds), you should perform the grid search on relevant hyperparameters for each model and modify the configs accordingly. The grid used is shown below:
 ```json
