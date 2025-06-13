@@ -5,6 +5,7 @@ Non-contrastive learning (NCL) methods have recently advanced many areas of mach
 
 ## Requirements Installation
 
+We recommend to use python 3.10 to replicate our environment.
 To install all the necessary packages, simply run
 
 ```bash
@@ -24,38 +25,29 @@ To reproduce the best results from the paper (in terms of NDCG@10) for each mode
 ```bash
 python train.py --config-path={CONFIG_PATH} --config-name={CONFIG_NAME} data_path={DATA_PATH}
 ```
-For example, to reproduce the best results of the $CE$ model on the Yelp dataset with temporal train/test splitting, you should run
+For example, to reproduce the best results of the $BT-SR$ model on the Yelp dataset with temporal train/test splitting, you should run
 ```bash
 python train.py --config-path=configs/temporal/yelp --config-name='ce_bt' data_path=data/yelp.csv
 ```
-For the $BT$ model, there are both configs for the best NDCG@10 performance (sce_max_ndcg.yaml) and for the same performance as the second-best model but with reduced memory consumption (ce_bt.yaml) or (sce_bt.yaml).
 
-To reproduce the result for non-optimal configurations (other points on the corresponding figure) and to reproduce more accurate results for optimal configurations (using several random seeds), you should perform the grid search on relevant hyperparameters for each model and modify the configs accordingly. The grid used is shown below:
-```json
-{
-    "ce": 
-        {"trainer_params.seed": [1235, 37, 2451, 12, 3425],
-         "dataloader.batch_size": [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]},
-    "bce": 
-        {"trainer_params.seed": [1235, 37, 2451, 12, 3425],
-         "dataloader.batch_size": [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
-         "dataloader.n_neg_samples": [1, 4, 16, 64, 256, 1024, 4096]},
-    "dross(CE^-)": 
-        {"trainer_params.seed": [1235, 37, 2451, 12, 3425],
-         "dataloader.batch_size": [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
-         "dataloader.n_neg_samples": [1, 4, 16, 64, 256, 1024, 4096]},
-    "gbce": 
-        {"trainer_params.seed": [1235, 37, 2451, 12, 3425],
-         "dataloader.batch_size": [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
-         "dataloader.n_neg_samples": [1, 4, 16, 64, 256, 1024, 4096],
-         "model_params.gbce_t": [0.75, 0.9]},
-    "sce": 
-        {"trainer_params.seed": [1235, 37, 2451, 12, 3425],
-         "dataloader.batch_size": [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
-         "model_params.n_buckets": "int((dataloader.batch_size * interactions_per_user) ** 0.5 * 2.)",
-         "model_params.bucket_size_x": "int((dataloader.batch_size * interactions_per_user) ** 0.5 * 2.)",
-         "model_params.bucket_size_y": [64, 256, 512, 1024, 4096]},
-}
-``` 
+Below are commands to reproduce our best results of $BT-SR$ model on 5 datasets included in the paper:
+```bash
+python train.py --config-path=configs/temporal/ml1m --config-name='ce_bt' data_path='None'
+```
 
+```bash
+python train.py --config-path=configs/temporal/yelp --config-name='ce_bt' data_path=data/yelp.csv
+```
+
+```bash
+python train.py --config-path=configs/temporal/beauty --config-name='sce_bt' data_path=data/beauty.csv
+```
+
+```bash
+python train.py --config-path=configs/temporal/kindle_store --config-name='sce_bt' data_path=data/kindle.csv
+```
+
+```bash
+python train.py --config-path=configs/temporal/gowalla --config-name='ce_bt' data_path=data/gowalla.csv
+```
 

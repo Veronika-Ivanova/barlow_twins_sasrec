@@ -22,7 +22,7 @@ model_params:
   dropout_rate: 0.3
 
   ssl:
-    lmd: 0.25 #0.08
+    lmd: 0.08 #0.08
     barlow_twins:
       proj_layers: NULL #NULL
       proj_dim: 64 #1024 #2048
@@ -39,4 +39,4 @@ trainer_params:
   patience: 10    # nmb of epoches to wait for improvement in validation metrics
   skip_epochs: 1  # how often to check if validation metrics are improved
   learning_rate: 0.001
-  seed: 147
+  seed: 88

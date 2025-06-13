@@ -39,4 +39,4 @@ trainer_params:
   patience: 30    # nmb of epoches to wait for improvement in validation metrics
   skip_epochs: 1  # how often to check if validation metrics are improved
   learning_rate: 0.001
-  seed: 1241
+  seed: 37

@@ -20,7 +20,7 @@ model_params:
   #sampling: 'no_sampling'
 
   ssl:
-    lmd: 0.4 #0.1 #1.0
+    lmd: 0.1 #0.1 #1.0
     barlow_twins:
       proj_layers: NULL
       proj_dim: 64 #1024 #2048
