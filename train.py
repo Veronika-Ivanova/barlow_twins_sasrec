@@ -103,7 +103,6 @@ def main(config):
         for metric_name, metric_value in test_scores.items():
             log.report_single_value(name=f'test_{metric_name}', value=round(metric_value, 4))
         
-        print("Sending images!")
         """log.report_image(
             title="Embedding 2D UMAP",
             series="Density",
