@@ -67,11 +67,19 @@ Specifically, we set α = 0 to entirely remove the Barlow Twins term from the tr
 For sensitivity analysis, we first fix α to its optimal value and vary λ to assess its impact on invariance. Similarly, we fix λ and adjust α to analyze sensitivity with respect to decorrelation. The results demonstrate that both invariance and decorrelation play crucial roles in learning generalizable user representations for sequential recommendation (SR).
 
 We observe dataset-dependent optimal configurations for α and λ. More interestingly, tuning these parameters allows control over recommender behavior, such as the trade-off between the quality of long-tail and short-head recommendations. For instance, on Gowalla, the maximum HR@1 is achieved with α = 0.5, while HR@10 peaks at α = 0.1. Additionally, increasing α significantly improves Cov@K on YELP and Gowalla. The popularity bucket metrics further (Figure 3) reveal that α can be adjusted to balance recommendation quality across different popularity segments.
+
 <img width="1257" height="643" alt="image" src="https://github.com/user-attachments/assets/5931a8ed-55e1-44b1-b6fd-a5230465618c" />
+
 Figure 1. Sensitivity Analysis w.r.t. α of hr@K and cov@K metrics
+
 <img width="1247" height="662" alt="image" src="https://github.com/user-attachments/assets/0c73e671-4add-48af-99dd-b51562b20829" />
+
 Figure 2. Sensitivity Analysis w.r.t. λ of hr@K and cov@K metrics
+
 <img width="1249" height="648" alt="image" src="https://github.com/user-attachments/assets/7a7bf75a-8495-4518-b819-cd5f16e4c946" />
+
 Figure 3. Sensitivity Analysis w.r.t. α for recommendations over 3 item popularity buckets
+
 <img width="1258" height="642" alt="image" src="https://github.com/user-attachments/assets/ce4d2c4a-e674-4b9f-b1b8-3f2e7cf625d0" />
+
 Figure 4. Sensitivity Analysis w.r.t. λ for recommendations over 3 item popularity buckets
